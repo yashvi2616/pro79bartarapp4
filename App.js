@@ -1,21 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { createAppContainer, createSwitchNavigator} from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import SignupLoginScreen from './screens/SignupLoginScreen';
+import HomeScreen from './screens/HomeScreen'
+import Exchange from './screens/Exchange';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppContainer/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const TabNavigator = createBottomTabNavigator({
+    HomeScreen: {screen: HomeScreen},
+    Exchange: {screen: Exchange},
   },
-});
+  {
+    defaultNavigationOptions: ({navigation})=>({
+      tabBarIcon: ()=>{
+        const routeName = navigation.state.routeName;
+        if(routeName === "HomeScreen"){
+          return(
+            <Image
+            source={require("./assets/home.png")}
+            style={{width:20, height:20}}
+          />
+          )
+
+        }
+        else if(routeName === "Exchange"){
+          return(
+            <Image
+            source={require("./assets/exchange.png")}
+            style={{width:20, height:20,}}
+          />)
+
+        }
+      }
+    })
+  }
+);
+
+const switchNavigator = createSwitchNavigator({
+  SignupLoginScreen:{screen: SignupLoginScreen},
+  BottomTab:{screen: TabNavigator}
+})
+
+const AppContainer =  createAppContainer(switchNavigator);
